@@ -1,5 +1,15 @@
-with cities as (
-          select distinct city_name as city_name
+/* Approach: Individual CTE’s are used to make connection clean and understandable
+
+1. Cleaned the US_CITIES to have one row per combination of city and state abbreviation. 
+2. Connected Customer personal data with customer address and inner joined to cities CTE; to allow customer whose cities are in the Cities CTE to be permitted
+3. Create Supplier location CTE with the help of Cities CTE; to provide latitude and longitude data
+4. Cross joining customer location and supplier location to get a matrix of all possible combinations. 
+I tried HAVERSINE before checking the instructions ; later I used ST_DISTANCE to compare. There is a slight difference in numbers but it's negligible looking at the overall picture. 
+Ranked the distances for each customer and picked the RANK = 1 to get the shortest distance. 
+*/
+
+with cities as 
+(select distinct city_name as city_name
         , state_abbr as state_abbr
         , lat
         , long
@@ -15,8 +25,8 @@ left join customers.customer_address a on c.customer_id =a.customer_id
 inner join cities r on TRIM(UPPER(a.customer_city)) = TRIM(r.city_name) and TRIM(a.customer_state) = TRIM(r.state_abbr)
 ) , 
                              
-supplier_location as (select s.*
-        , r.Lat, r.Long 
+supplier_location as 
+(select s.* , r.Lat, r.Long 
 from suppliers.supplier_info s
 left join cities r on TRIM(r.city_name) = TRIM(UPPER(s.supplier_city)) 
                                 and TRIM(r.state_abbr) = TRIM(s.supplier_state) 
