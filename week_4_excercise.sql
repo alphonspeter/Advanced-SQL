@@ -54,7 +54,7 @@ LIMIT 100;
 
 /* Regarding evanluation of the candidate's Query
 1. No particular support of CTE's with comments
-2. Couldnt find the need to use the TABLE : 'PART' as TABLE ='ORDERS' is suffice for the business question
+2. Couldnt find the need to use the TABLE : 'PART' as TABLE ='ORDERS' and TABLE ='LINEITEM'  is suffice for the business question
 2. The multiple inner joins could prove confusing ans costly 
 4. Results producing duplicates 
 */
